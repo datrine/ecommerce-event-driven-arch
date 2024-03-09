@@ -10,11 +10,11 @@ This project aims to build an Order Management System consisting of various comp
 
 ## Components
 
-### Frontend (React)
+### Frontend (React using NextJs)
 
 The frontend component serves as the user interface for creating orders. It facilitates product selection, quantity input, and other relevant actions for order creation.
 
-### Backend (Node.js)
+### Backend (Node.js usting NestJS and typescript)
 
 The backend component consists of several sub-components:
 
@@ -33,7 +33,7 @@ The Worker component carries out the following tasks:
 - Subscribes to the message broker to receive order creation events.
 - Processes these events, which may involve tasks such as inventory management, payment processing simulation, and sending order confirmation emails.
 
-### Database (PostgreSQL)
+### Database (PostgreSQL with Prisma as ORM)
 
 The Database component stores crucial information related to orders, inventory, and user details. PostgreSQL is chosen as the database management system for its robustness and reliability.
 
@@ -48,7 +48,7 @@ The Database component stores crucial information related to orders, inventory, 
 
 To get started with the Order Management System:
 
-1. Clone this repository.
+1. Clone this repository as well as the frontend app here https://github.com/datrine.
 2. Set up the frontend and backend according to their respective README files.
 3. Configure the Event Broker and Worker components.
 4. Set up the PostgreSQL database and ensure it's running properly.
