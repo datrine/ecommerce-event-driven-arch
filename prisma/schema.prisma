@@ -13,19 +13,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Order {
-  id   String      @unique
-  cart OrderItem[]
+model Account {
+  id           String   @unique
+  email        String   @unique
+  passwordHash String
+  profile      Profile?
 }
 
-model OrderItem {
+model Profile {
+  id        String  @unique
+  email     String  @unique
+  username  String
+  firstName String?
+  lastName  String?
+  account   Account @relation(fields: [email], references: [email])
+}
+
+model Order {
+  id          String          @unique
+  billingInfo BillingInfo?
+  orderItems  ProductAsItem[]
+}
+
+model Cart {
+  id        String          @unique
+  items     ProductAsItem[]
+  createdAt DateTime        @default(now())
+}
+
+model ProductAsItem {
   id        String         @unique
-  cartId    String
-  orderId   String
+  cartId    String?
   productId String
-  price Decimal
+  price     Decimal
+  orderId   String?
   product   ProductInStock @relation(fields: [productId], references: [id])
-  order     Order          @relation(fields: [orderId], references: [id])
+  order     Order?         @relation(fields: [orderId], references: [id])
+  cart      Cart?          @relation(fields: [cartId], references: [id])
+}
+
+model BillingInfo {
+  id        String              @unique
+  orderId   String              @unique
+  order     Order               @relation(fields: [orderId], references: [id])
+  firstName String?
+  lastName  String?
+  address   BillingInfoAddress?
+}
+
+model BillingInfoAddress {
+  id            String      @unique
+  billingInfoId String      @unique
+  addressId     String
+  billingInfo   BillingInfo @relation(fields: [billingInfoId], references: [id])
+  address       Address     @relation(fields: [addressId], references: [id])
+}
+
+model Address {
+  id               String               @unique
+  state            String?
+  houseNumber      Int?
+  floorNumber      Int?
+  street           String?
+  billingAddresses BillingInfoAddress[]
 }
 
 model Store {
@@ -46,14 +96,14 @@ model Inventory {
 }
 
 model ProductInStock {
-  id                  String      @unique
-  quantity            Int
-  price               Decimal
-  productId           String
-  productAsOrderItems OrderItem[]
-  product             Product     @relation(fields: [productId], references: [id])
-  Inventory           Inventory   @relation(fields: [inventoryId], references: [id])
-  inventoryId         String
+  id             String          @unique
+  quantity       Int
+  price          Decimal
+  productId      String
+  inventoryId    String
+  productAsItems ProductAsItem[]
+  product        Product         @relation(fields: [productId], references: [id])
+  Inventory      Inventory       @relation(fields: [inventoryId], references: [id])
 }
 
 model Product {
